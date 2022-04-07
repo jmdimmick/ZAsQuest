@@ -140,11 +140,6 @@ function buildResponse(cmd) {
             player.stats.neediness = 0;
             player.neighbors[neighborName] = true;
             neighborName = newNeighbor(0);
-            console.log(neighborNames);
-            console.log(neighborName);
-            console.log(typeof neighborName);
-            // console.log(player.neighbors);
-            console.log(getDetail(randArray));
             return quest;
             //set up new neighbor to generate with a story of what happened to the old neighbor if they helped on the quest.
             //they always die, every time
@@ -257,21 +252,17 @@ function getFightOutcome() {
 }
 
 function newNeighbor(attempts) {
-    let newGuy = getDetail(neighborNames)
+    var newGuy = getDetail(neighborNames);
     attempts++;
-    if (typeof newGuy === undefined) {
-        console.log('shit');
-        return newGuy;
-    }
-    else if (!player.neighbors[newGuy]) {
+    if (!player.neighbors[newGuy]) {
         console.log(newGuy);
         console.log(typeof newGuy);
-        console.log('success');
+        console.log(`success at ${attempts} attempts`);
         return newGuy;
     }
     else if (attempts < neighborNames.length - 1) {
         console.log('new attempt');
-        newNeighbor(attempts);
+        return newNeighbor(attempts);
     }
     else {
         console.log('god mode');
