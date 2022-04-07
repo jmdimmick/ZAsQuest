@@ -12,6 +12,7 @@ const player = {
         coolness: 0,
         shame: 0,
         confidence: 0,
+        friends: 0,
     },
     uniqueItems: {},
     genericItems: {},
@@ -133,7 +134,14 @@ function buildResponse(cmd) {
         case 'A\n': 
             return inventory;
         case 'S\n':
-            return stats;
+            print("");
+            print(`  Drunkeness______${player.stats.drunkeness}`);
+            print(`  Confidence______${player.stats.confidence}`);
+            print(`  Coolness________${player.stats.coolness}`);
+            print(`  Neediness_______${player.stats.neediness}`);
+            print(`  Obnoxiousness___${player.stats.obnoxiousness}`);
+            print(`  Shame___________${player.stats.shame}`);
+            return topMenu;
         case 'Q\n':
             player.stats.drunkeness = 0;
             player.stats.neediness = 0;
@@ -218,7 +226,6 @@ function drinkCheck(cmdStr, lastMove) {
             }
         case 'C\n':
             if (lastMove == "O") {
-                print(`\n  Drunkeness = ${player.stats.drunkeness}`);
                 player.stats.obnoxiousness++;
                 return complain;
             }
@@ -332,6 +339,30 @@ X. Exit Game
 
     Stats Menu:
     Z, A, S, Q, X
+
+player = {
+    stats: {
+        drunkeness: 0,
+        obnoxiousness: 0,
+        neediness: 0,
+        coolness: 0,
+        shame: 0,
+        confidence: 0,
+    },
+    uniqueItems: {},
+    genericItems: {},
+    quests: {},
+    neighbors: {}
+}
+
+drinking ++ drunkeness
+    drink4neighbor ++ coolness
+    complaining/fighting ++ obnoxiousness
+    peaceful ++ coolness
+        fighting/winning ++ confidence
+        fighting/losing ++ shame
+    helpasking ++ neediness
+    helpreceived ++ friends
 
 
 
