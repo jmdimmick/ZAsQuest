@@ -9,7 +9,9 @@ const player = {
         drunkeness: 0,
         obnoxiousness: 0,
         neediness: 0,
-        coolness: 0
+        coolness: 0,
+        shame: 0,
+        confidence: 0,
     },
     uniqueItems: {},
     genericItems: {},
@@ -68,11 +70,9 @@ const fightStyles = ['fisticuffs.', 'arm wrestling.', 'a pushup race.', 'random 
 'a thumb war.', 'a series of inense rock paper scissors matches.', 'holding a burning match.', 'a staring contest.', 
 'darts where your faces were the targets.', 'trading ball taps.', 'trading licks, like licking each other for real.'];
 
-const yesHelp = `\n  Your neighbor, ${neighborName}, has agreed to help you.\n`;
 
-const noHelp = `\n  Your neighbor, ${neighborName}, does not want to help.\n`;
 
-const helpActions = [yesHelp, noHelp];
+const helpActions = ['yesHelp', 'noHelp'];
 
 //ACTION RESULT CONSTRUCTORS
 
@@ -88,18 +88,17 @@ const upgradeMessage = "\n  You upgraded that to this.\n";
 
 const peaceful = "\n  You are getting drunk.\n";
 
-const fight = `\n  You have started a fight with ${neighborName}.\n`;
+const fight = `\n  You have started a fight with `;
 
-const fightRepeat = `\n  You have started a fight with ${neighborName} ... again.\n`;
+const fightRepeat = `\n  You have started a fight with `;
 
 const fightLost = `\n\
   You lost. :( \n\
-  ${neighborName} bested you at `
-  //take out fightStyle reference and call it in the getOutcome function so it will call a new fight style each time
+  `;
 
 const fightWon = `\n\
 \n\
-\n You bested ${neighborName} at `
+\n You bested `;
 
 const fightOutcomes = [fightLost, fightWon]
 
@@ -178,8 +177,6 @@ function buildResponse(cmd) {
 
 function getDetail(detailArr) {
     let index = random(detailArr.length);
-    console.log(detailArr.length);
-    console.log(index);
     return detailArr[index];
 }
 
@@ -204,6 +201,7 @@ function drinkCheck(cmdStr, lastMove) {
             if (lastMove == "P") {
                 print(`\n  Drunkeness = ${player.stats.drunkeness}`);
                 player.stats.coolness++;
+                player.stats.obnoxiousness--;
                 return peaceful;
             }
             else {
@@ -231,7 +229,7 @@ function drinkCheck(cmdStr, lastMove) {
             if (lastMove == "O") {
                 print(`\n  Drunkeness = ${player.stats.drunkeness}`);
                 player.stats.neediness++;
-                return requestHelp;
+                return getNeighborAction(requestHelp);
             }
             else {
                 return drinkFail;
@@ -243,11 +241,11 @@ function drinkCheck(cmdStr, lastMove) {
 
 function getFightOutcome() {
     const fightStyle = getDetail(fightStyles);
-    if (player.stats.obnoxiousness > 1) {
-        return fightRepeat + fightOutcome + fightStyle;
+    if (player.stats.obnoxiousness >= 2) {
+        return fightRepeat + `${neighborName} ... again.\n` + `\n  You lost. :( \n\n  ${neighborName} bested you at ` + fightStyle + `\n`;
     }
     else {
-        return fight + fightOutcome + fightStyle;
+        return fight + `${neighborName}.\n` + `\n  You won. :) \n\n  You bested ${neighborName} at ` + fightStyle + `\n`;
     }
 }
 
@@ -255,20 +253,37 @@ function newNeighbor(attempts) {
     var newGuy = getDetail(neighborNames);
     attempts++;
     if (!player.neighbors[newGuy]) {
-        console.log(newGuy);
-        console.log(typeof newGuy);
-        console.log(`success at ${attempts} attempts`);
+        // console.log(newGuy);
+        // console.log(typeof newGuy);
+        // console.log(`success at ${attempts} attempts`);
         return newGuy;
     }
     else if (attempts < neighborNames.length - 1) {
-        console.log('new attempt');
+        // console.log('new attempt');
         return newNeighbor(attempts);
     }
     else {
-        console.log('god mode');
+        // console.log('god mode');
         return "God (You are alone now.)"
     }
 }
+
+function getNeighborAction(result) {
+    switch (result) {
+        case 'yesHelp':
+            return `\n  Your neighbor, ${neighborName}, has agreed to help you.\n`;
+        case 'noHelp':
+            return `\n  Your neighbor, ${neighborName}, does not want to help.\n`;
+    }
+}
+
+// const yesHelp = `\n  Your neighbor, ${neighborName}, has agreed to help you.\n`;
+
+// const noHelp = `\n  Your neighbor, ${neighborName}, does not want to help.\n`;
+
+
+
+
 
 /*
 ZA'S QUEST
