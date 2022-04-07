@@ -58,10 +58,11 @@ const drink4Else = "\n\
 //REQUEST HELP ACTION
 
 const neighborNames = ['Svie', 'Wart', 'Grog', 'Gunt', 'Lond', 'Guze', 'Horp', 'Durt', 'Pock', 'Chim', 'Dunp', 'Wirl',
-'Pent', 'Quif', 'Yorf', 'Itol', 'Monb', 'Forc', 'Xord', 'Asse', 'Damg', 'Hoji', 'Kult', 'Joix', 'Urft', 'Licq', 'Orel', 
-'Whef', 'Cerd', 'Fonf', 'Jalt', 'Buse', 'Vole', 'Leps', 'Pold', 'Exid', 'Tchs', 'Djom', 'Jomb', 'Lury', 'Epol', 'Pian'];
+'Pent', 'Quif', 'Yorf', 'Itol', 'Monb', 'Forc', 'Xord', 'Asse', 'Damg', 'Hoji', 'Kult', 'Joix', 
+'Urft', 'Licq', 'Orel', 'Whef', 'Cerd', 'Fonf', 'Jalt', 'Buse', 'Vole', 'Leps', 'Pold', 'Exid', 
+'Tchs', 'Djom', 'Jomb', 'Lury', 'Epol', 'Pian'];
 
-const neighborName = getDetail(neighborNames);
+let neighborName = getDetail(neighborNames);
 
 const fightStyles = ['fisticuffs.', 'arm wrestling.', 'a pushup race.', 'random feats of strength.', 'a dance off.', 'log rolling.', 
 'a thumb war.', 'a series of inense rock paper scissors matches.', 'holding a burning match.', 'a staring contest.', 
@@ -116,6 +117,7 @@ const drinkFail = "\n  You need to buy another drink to do that.\n\
    O.   Buy some mead for your neighbor \n\
    TOP. Z, A, S, Q, X \n"
 
+   const randArray = [0, 1];
 
 let currentMove = "";
 let lastMove = "";
@@ -137,7 +139,12 @@ function buildResponse(cmd) {
             player.stats.drunkeness = 0;
             player.stats.neediness = 0;
             player.neighbors[neighborName] = true;
-            console.log(player.neighbors);
+            neighborName = newNeighbor(0);
+            console.log(neighborNames);
+            console.log(neighborName);
+            console.log(typeof neighborName);
+            // console.log(player.neighbors);
+            console.log(getDetail(randArray));
             return quest;
             //set up new neighbor to generate with a story of what happened to the old neighbor if they helped on the quest.
             //they always die, every time
@@ -175,14 +182,17 @@ function buildResponse(cmd) {
 }
 
 function getDetail(detailArr) {
-    return detailArr[random(detailArr.length)];
+    let index = random(detailArr.length);
+    console.log(detailArr.length);
+    console.log(index);
+    return detailArr[index];
 }
 
 function random(length) {
     return Math.floor(Math.random()*length);
 }
 
-function isEven(uInput, context, filename, callback) {
+function evalInput(uInput, context, filename, callback) {
     print(buildResponse(uInput));
     currentMove = uInput.toUpperCase();
     lastMove = currentMove.substring(0, currentMove.length-1);
@@ -246,15 +256,28 @@ function getFightOutcome() {
     }
 }
 
-// function newNeighbor() {
-//     let newNeighbor = getDetail(neighborNames)
-//     if (!player.neighbors[newNeighbor]) {
-//         return newNeighbor;
-//     }
-//     else {
-//         newNeighbor();
-//     }
-// }
+function newNeighbor(attempts) {
+    let newGuy = getDetail(neighborNames)
+    attempts++;
+    if (typeof newGuy === undefined) {
+        console.log('shit');
+        return newGuy;
+    }
+    else if (!player.neighbors[newGuy]) {
+        console.log(newGuy);
+        console.log(typeof newGuy);
+        console.log('success');
+        return newGuy;
+    }
+    else if (attempts < neighborNames.length - 1) {
+        console.log('new attempt');
+        newNeighbor(attempts);
+    }
+    else {
+        console.log('god mode');
+        return "God (You are alone now.)"
+    }
+}
 
 /*
 ZA'S QUEST
@@ -312,4 +335,4 @@ if (lastMove == "") {
     print(topMenu);
 }
 
-repl.start({ prompt: "Enter an Option ==> ", eval: isEven });
+repl.start({ prompt: "Enter an Option ==> ", eval: evalInput });
