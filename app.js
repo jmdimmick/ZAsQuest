@@ -12,13 +12,14 @@ const player = {
         coolness: 0,
         shame: 0,
         confidence: 0,
-        friends: 0,
+        hasFriend: false,
+        hasQuest: false
     },
     uniqueItems: {},
     genericItems: {},
     quests: {},
     neighbors: {}
-}
+};
 
 const topMenu = "\n\
 Top Menu: \n\
@@ -117,7 +118,35 @@ const drinkFail = "\n  You need to buy another drink to do that.\n\
    O.   Buy some mead for your neighbor \n\
    TOP. Z, A, S, Q, X \n"
 
-   const randArray = [0, 1];
+//QUEST COMPONENTS
+
+const monsters = ['gorth', 'barat', 'uniff', 'prantz', 'reir monk', 'sweet beezil', 'wite', 'klepping', 'trune', 'weirn', 
+'fuul', 'repling', 'const', 'grimp', 'rundle', 'wute', 'popple', 'duplecks', 'zinto', 'guey', 'julip', 'weffer', 'lonk', 
+'gonk', 'ranter', 'antihelo', 'buleon', 'grinx', 'nuhl', 'chuf', 'domb', 'klit', 'miil', 'avout', 'lewdie', 'opli', 'derper'];
+
+const quests = ['steal the eggs of a hairy eagle', 'ask the immortal being the ultimate question', 'destroy the enchanted belt buckle', 'climb the musty mountains of Groyne to find the Pubrict', 
+'learn the holy rituals of the mock people', 'exterminate the parasitic race of knotted worms', 'dance with an enchantress', 'seduce the love goddess', 'pluck a scale from the enchanted arse-dragon', 
+'find the lost path to the death pyramids', 'solve the riddle of the foolish doctor', 'return from the depths of the deep hole, with pictures', 'eat the luscious fruit of the Cevantese Bush', 
+'clip the wings of the flatulent owl', 'begin a never-ending story', 'ride the fin of a great whale to mysterious center of the sea', 'learn the unusual ways of the lawless gimps and exploit them', 
+'play a game of chance with the great wizard, Pulleguean the Uncomforable', 'discover the terrible truth of our leader', 'train with the greatest grandpa in the realm', 'face the boring fire weasel', 
+'burn the sacred scrolls', 'destroy the heretical evidence of our close evolutionary relatives', 'disguise yourself amongst the poo-dwellers and exploit them', 'gain the respect of the local weirdo', 
+'hunt the formidable pack of vegetarian wolves', 'battle the foul demon inhabiting farm animals', 'enter the dream of the competing tavern proprietor and incept the idea of dissolving his business', 
+'defeat all the stinging insects', 'embrace the love of a wood elf', 'find the missing town drunk', 'uncover the hidden meaning behind the inscription in the old oak tree', 'incite a rodent revolution',
+'drink from the well of amusing insights', 'read the ancient text containing the anticurse', 'slay the great elaborator', 'sabotage the mechanical thinking device that secretly controls the realm'];
+
+const weapons = ['meaty bone', 'large needle', 'wooden hammer', 'sharp pinwheel', 'pinecone mace', 'keys between your fingers', 'flask of rare spices', 'frog sweat', 'weighted gloves', 'blunt sword', 
+'poison dust', 'quilled gauntlets', 'ink bomb', 'nasty hammer', 'double-edge sword', 'woven silk', 'rotten apples', 'spikey kneepads', 'infinite candle', 'youth tonic', 'grumpy toad', 'bone comb', 
+'bag of bees', 'rudimentary flamethrower', 'yeast bomb', 'botched healing potion', 'hair whip', 'bleeder', 'eye poison', 'knotted worm', 'bag of sick', 'pointed stick', 'braid of snakes', 'sugar blade', 
+'explosive spice', 'grain gun', 'trained hairy moths', 'bone chain', 'knuckle quills', 'small lance', 'molten dagger', 'mysterious orb', 'blood butter', 'dark bow', 'long finger knife', 'scorpion tail']
+
+const neighborWeapons = ['smelly sock', 'overextended wit', 'encyclopedic knowledge of forraging', 'disgusting magic', 'painted elephant truck', 'rotten wood club', 'terrible dad jokes', 'shuffle speed', 
+'goopey gloves', 'mental training', 'combat meditation', 'pitchy singing voice', 'ability to break dance', 'binaural beats', 'shoes', 'puss-filled warts', 'hat trick', 'story about the vegetarian wolves']
+
+const lys = ['bravely', 'sportingly', 'galantly', 'unquestionably', 'with grace', 'uniquely'];
+
+const questOutcomes = ['and defeated', 'but were defeated by'];
+
+const randArray = [0, 1];
 
 let currentMove = "";
 let lastMove = "";
@@ -146,10 +175,14 @@ function buildResponse(cmd) {
             player.stats.drunkeness = 0;
             player.stats.neediness = 0;
             player.neighbors[neighborName] = true;
+            questNeighbor = neighborName;
             neighborName = newNeighbor(0);
-            return quest;
-            //set up new neighbor to generate with a story of what happened to the old neighbor if they helped on the quest.
-            //they always die, every time
+            if (player.hasQuest) {
+                return getQuestSummary(questNeighbor);
+            }
+            else {
+                return 'You have not received a quest. Do a nice thing then ask the bartender.'
+            }
         case 'X\n':
             process.exit();
         case 'P\n':
@@ -176,6 +209,8 @@ function buildResponse(cmd) {
         case 'LAST\n':
             print(lastMove);
             return "";
+        case 'FULL PLAYER\n':
+            return player;
         default: 
             //can also console.log anything in plain text above the eval process
             //could be a good option for the menu ... or vice versa
@@ -228,6 +263,7 @@ function drinkCheck(cmdStr, lastMove) {
             if (lastMove == "O") {
                 player.stats.obnoxiousness++;
                 return complain;
+                //replace with asking the bartender for a quest. move the quest generator here, save it to player, and reference it in getQuest()
             }
             else {
                 return drinkFail;
@@ -278,10 +314,29 @@ function newNeighbor(attempts) {
 function getNeighborAction(result) {
     switch (result) {
         case 'yesHelp':
+            player.hasFriend = true;
             return `\n  Your neighbor, ${neighborName}, has agreed to help you.\n`;
         case 'noHelp':
             return `\n  Your neighbor, ${neighborName}, does not want to help.\n`;
     }
+}
+
+function getQuestSummary(neighbor) {
+    const monster = getDetail(monsters);
+    const quest = getDetail(quests);
+    const weapon = getDetail(weapons);
+    const neighborWeapon = getDetail(neighborWeapons);
+    const _ly = getDetail(lys);
+    const outcome = getDetail(questOutcomes);
+    let friendMessage = '';
+    if (player.hasFriend) {
+        friendMessage = `\n  Also, ${neighbor.toUpperCase()} helped by using their ${neighborWeapon.toUpperCase()}, but ultimately died.\n`;
+        player.hasFriend = false;
+    };
+    // const result = 'placeholder'
+    return `\n  You encountered the ${monster.toUpperCase()} on your quest to ${quest}.\n\
+    \n  You used your ${weapon.toUpperCase()} ${_ly} ${outcome} the ${monster.toUpperCase()}.\n\
+    ${friendMessage}`;
 }
 
 // const yesHelp = `\n  Your neighbor, ${neighborName}, has agreed to help you.\n`;
