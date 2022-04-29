@@ -15,8 +15,10 @@ const player = {
         hasFriend: false,
         hasQuest: false
     },
+    currentWeapon: 'no weapon',
     uniqueItems: {},
     genericItems: {},
+    currentQuest: '',
     quests: {},
     neighbors: {}
 };
@@ -120,6 +122,9 @@ const drinkFail = "\n  You need to buy another drink to do that.\n\
 
 //QUEST COMPONENTS
 
+const questPrompts = ['can score some hefty loot', 'really get your rocks off', 'feel alive like never before', 'earn some real respect', 'learn the meaning of life', 'impress the local beauties', 
+'achieve enlightenment', 'be the hero that we deserve', 'end the plague', 'advance your piece (if you know what I mean)', 'test the fates', 'soil your oats', 'self-actualize', 'call yourself a human'];
+
 const monsters = ['gorth', 'barat', 'uniff', 'prantz', 'reir monk', 'sweet beezil', 'wite', 'klepping', 'trune', 'weirn', 
 'fuul', 'repling', 'const', 'grimp', 'rundle', 'wute', 'popple', 'duplecks', 'zinto', 'guey', 'julip', 'weffer', 'lonk', 
 'gonk', 'ranter', 'antihelo', 'buleon', 'grinx', 'nuhl', 'chuf', 'domb', 'klit', 'miil', 'avout', 'lewdie', 'opli', 'derper'];
@@ -161,7 +166,8 @@ function buildResponse(cmd) {
         case 'Z\n':
             return barMenu;
         case 'A\n': 
-            return inventory;
+            return `\n  Current Weapon__${player.currentWeapon}\n\
+            ${topMenu}`;
         case 'S\n':
             print("");
             print(`  Drunkeness______${player.stats.drunkeness}`);
@@ -177,11 +183,11 @@ function buildResponse(cmd) {
             player.neighbors[neighborName] = true;
             questNeighbor = neighborName;
             neighborName = newNeighbor(0);
-            if (player.hasQuest) {
+            if (player.stats.hasQuest) {
                 return getQuestSummary(questNeighbor);
             }
             else {
-                return 'You have not received a quest. Do a nice thing then ask the bartender.'
+                return '\n  You have not received a quest. Do a nice thing then talk to the bartender.\n'
             }
         case 'X\n':
             process.exit();
@@ -261,8 +267,11 @@ function drinkCheck(cmdStr, lastMove) {
             }
         case 'C\n':
             if (lastMove == "O") {
-                player.stats.obnoxiousness++;
-                return complain;
+                player.stats.hasQuest = true;
+                player.currentQuest = getDetail(quests);
+                player.currentWeapon = getDetail(weapons);
+                const questPrompt = getDetail(questPrompts);
+                return `\n  Bartender: "I hear you can ${questPrompt} if you manage to ${player.currentQuest}."\n`;
                 //replace with asking the bartender for a quest. move the quest generator here, save it to player, and reference it in getQuest()
             }
             else {
@@ -323,7 +332,8 @@ function getNeighborAction(result) {
 
 function getQuestSummary(neighbor) {
     const monster = getDetail(monsters);
-    const quest = getDetail(quests);
+    const quest = player.currentQuest;
+    // const quest = getDetail(quests);
     const weapon = getDetail(weapons);
     const neighborWeapon = getDetail(neighborWeapons);
     const _ly = getDetail(lys);
@@ -334,6 +344,7 @@ function getQuestSummary(neighbor) {
         player.hasFriend = false;
     };
     // const result = 'placeholder'
+    player.hasQuest = false;
     return `\n  You encountered the ${monster.toUpperCase()} on your quest to ${quest}.\n\
     \n  You used your ${weapon.toUpperCase()} ${_ly} ${outcome} the ${monster.toUpperCase()}.\n\
     ${friendMessage}`;
