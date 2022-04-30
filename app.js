@@ -10,15 +10,16 @@ const player = {
         obnoxiousness: 0,
         neediness: 0,
         coolness: 0,
-        shame: 0,
-        confidence: 0,
+        //shame: 0,
+        //confidence: 0,
         hasFriend: false,
         hasQuest: false
     },
     currentWeapon: 'no weapon',
-    uniqueItems: {},
-    genericItems: {},
+    //uniqueItems: {},
+    //genericItems: {},
     currentQuest: '',
+    monsters: {},
     quests: {},
     neighbors: {}
 };
@@ -30,6 +31,9 @@ A. Inventory \n\
 S. Stats \n\
 Q. Start Quest \n\
 X. Exit Game\n"
+
+const topMenuAbbr = "\n\
+  TOP. Z, A, S, Q, X \n"
 
 const barMenu = "\n\
     What would like to drink? \n\
@@ -139,10 +143,11 @@ const quests = ['steal the eggs of a hairy eagle', 'ask the immortal being the u
 'defeat all the stinging insects', 'embrace the love of a wood elf', 'find the missing town drunk', 'uncover the hidden meaning behind the inscription in the old oak tree', 'incite a rodent revolution',
 'drink from the well of amusing insights', 'read the ancient text containing the anticurse', 'slay the great elaborator', 'sabotage the mechanical thinking device that secretly controls the realm'];
 
-const weapons = ['meaty bone', 'large needle', 'wooden hammer', 'sharp pinwheel', 'pinecone mace', 'keys between your fingers', 'flask of rare spices', 'frog sweat', 'weighted gloves', 'blunt sword', 
-'poison dust', 'quilled gauntlets', 'ink bomb', 'nasty hammer', 'double-edge sword', 'woven silk', 'rotten apples', 'spikey kneepads', 'infinite candle', 'youth tonic', 'grumpy toad', 'bone comb', 
-'bag of bees', 'rudimentary flamethrower', 'yeast bomb', 'botched healing potion', 'hair whip', 'bleeder', 'eye poison', 'knotted worm', 'bag of sick', 'pointed stick', 'braid of snakes', 'sugar blade', 
-'explosive spice', 'grain gun', 'trained hairy moths', 'bone chain', 'knuckle quills', 'small lance', 'molten dagger', 'mysterious orb', 'blood butter', 'dark bow', 'long finger knife', 'scorpion tail']
+const weapons = ['meaty bone', 'large needle', 'wooden hammer', 'sharp pinwheel', 'pinecone mace', 'set of keys', 'flask of rare spices', 'frog sweat', 'weighted gloves', 'blunt sword', 'poison dust', 
+'pair of quilled gauntlets', 'ink bomb', 'nasty hammer', 'double-edge sword', 'woven silk', 'sack of rotten apples', 'pair of spikey kneepads', 'infinite candle', 'youth tonic', 'grumpy toad', 
+'bone comb', 'bag of bees', 'rudimentary flamethrower', 'yeast bomb', 'botched healing potion', 'hair whip', 'bleeder', 'eye poison', 'knotted worm', 'bag of sick', 'pointed stick', 'braid of snakes', 
+'sugar blade', 'explosive spice', 'grain gun', 'trained hairy moth', 'bone chain', 'pair of knuckle quills', 'small lance', 'molten dagger', 'mysterious orb', 'blood butter', 'dark bow', 
+'long finger knife', 'scorpion tail']
 
 const neighborWeapons = ['smelly sock', 'overextended wit', 'encyclopedic knowledge of forraging', 'disgusting magic', 'painted elephant truck', 'rotten wood club', 'terrible dad jokes', 'shuffle speed', 
 'goopey gloves', 'mental training', 'combat meditation', 'pitchy singing voice', 'ability to break dance', 'binaural beats', 'shoes', 'puss-filled warts', 'hat trick', 'story about the vegetarian wolves']
@@ -167,7 +172,7 @@ function buildResponse(cmd) {
             return barMenu;
         case 'A\n': 
             return `\n  Current Weapon__${player.currentWeapon}\n\
-            ${topMenu}`;
+            ${topMenuAbbr}`;
         case 'S\n':
             print("");
             print(`  Drunkeness______${player.stats.drunkeness}`);
@@ -176,18 +181,18 @@ function buildResponse(cmd) {
             print(`  Neediness_______${player.stats.neediness}`);
             print(`  Obnoxiousness___${player.stats.obnoxiousness}`);
             print(`  Shame___________${player.stats.shame}`);
-            return topMenu;
+            return topMenuAbbr;
         case 'Q\n':
-            player.stats.drunkeness = 0;
-            player.stats.neediness = 0;
-            player.neighbors[neighborName] = true;
-            questNeighbor = neighborName;
-            neighborName = newNeighbor(0);
             if (player.stats.hasQuest) {
+                player.stats.drunkeness = 0;
+                player.stats.neediness = 0;
+                player.neighbors[neighborName] = true;
+                questNeighbor = neighborName;
+                neighborName = newNeighbor(0);
                 return getQuestSummary(questNeighbor);
             }
             else {
-                return '\n  You have not received a quest. Do a nice thing then talk to the bartender.\n'
+                return '\n  You do not have a pending quest. Do a nice thing then talk to the bartender.\n'
             }
         case 'X\n':
             process.exit();
@@ -251,7 +256,8 @@ function drinkCheck(cmdStr, lastMove) {
                 print(`\n  Drunkeness = ${player.stats.drunkeness}`);
                 player.stats.coolness++;
                 player.stats.obnoxiousness--;
-                return peaceful;
+                return `${peaceful}\n\
+                ${topMenuAbbr}`;
             }
             else {
                 return drinkFail;
@@ -260,7 +266,8 @@ function drinkCheck(cmdStr, lastMove) {
             if (lastMove == "P") {
                 print(`\n  Drunkeness = ${player.stats.drunkeness}`);
                 player.stats.obnoxiousness++;
-                return getFightOutcome();
+                return `${getFightOutcome()}\n\
+                ${topMenuAbbr}`;
             }
             else {
                 return drinkFail;
@@ -271,7 +278,9 @@ function drinkCheck(cmdStr, lastMove) {
                 player.currentQuest = getDetail(quests);
                 player.currentWeapon = getDetail(weapons);
                 const questPrompt = getDetail(questPrompts);
-                return `\n  Bartender: "I hear you can ${questPrompt} if you manage to ${player.currentQuest}."\n`;
+                return `\n  Bartender: "I hear you can ${questPrompt} if you manage to ${player.currentQuest}. Take this ${player.currentWeapon.toUpperCase()} to help you."\n\
+                \n  You now have a quest!\n\
+                ${topMenuAbbr}`;
                 //replace with asking the bartender for a quest. move the quest generator here, save it to player, and reference it in getQuest()
             }
             else {
@@ -281,7 +290,8 @@ function drinkCheck(cmdStr, lastMove) {
             if (lastMove == "O") {
                 print(`\n  Drunkeness = ${player.stats.drunkeness}`);
                 player.stats.neediness++;
-                return getNeighborAction(requestHelp);
+                return `${getNeighborAction(requestHelp)}\n\
+                ${topMenuAbbr}`;
             }
             else {
                 return drinkFail;
@@ -331,10 +341,11 @@ function getNeighborAction(result) {
 }
 
 function getQuestSummary(neighbor) {
-    const monster = getDetail(monsters);
+    const monster = newMonster(0);
+    player.monsters[monster] = true;
     const quest = player.currentQuest;
-    // const quest = getDetail(quests);
-    const weapon = getDetail(weapons);
+    player.quests[quest] = true;
+    const weapon = player.currentWeapon;
     const neighborWeapon = getDetail(neighborWeapons);
     const _ly = getDetail(lys);
     const outcome = getDetail(questOutcomes);
@@ -343,45 +354,33 @@ function getQuestSummary(neighbor) {
         friendMessage = `\n  Also, ${neighbor.toUpperCase()} helped by using their ${neighborWeapon.toUpperCase()}, but ultimately died.\n`;
         player.hasFriend = false;
     };
-    // const result = 'placeholder'
-    player.hasQuest = false;
+    player.stats.hasQuest = false;
     return `\n  You encountered the ${monster.toUpperCase()} on your quest to ${quest}.\n\
     \n  You used your ${weapon.toUpperCase()} ${_ly} ${outcome} the ${monster.toUpperCase()}.\n\
     ${friendMessage}`;
 }
 
-// const yesHelp = `\n  Your neighbor, ${neighborName}, has agreed to help you.\n`;
-
-// const noHelp = `\n  Your neighbor, ${neighborName}, does not want to help.\n`;
-
-
-
-
+function newMonster(attempts) {
+    var newMon = getDetail(monsters);
+    attempts++;
+    if (!player.monsters[newMon]) {
+        // console.log(newGuy);
+        // console.log(typeof newGuy);
+        // console.log(`success at ${attempts} attempts`);
+        return newMon;
+    }
+    else if (attempts < monsters.length - 1) {
+        // console.log('new attempt');
+        return newMonster(attempts);
+    }
+    else {
+        // console.log('god mode');
+        return "God (You are alone now.)"
+    }
+}
 
 /*
 ZA'S QUEST
-
-Top Menu:
-Z. Bar
-A. Inventory
-S. Stats
-Q. Start Quest
-X. Exit Game
-
-    Bar Menu:
-    P. Buy some mead for yourself
-    O. Buy some mead for your neighbor
-    Z, A, S, Q, X
-
-        Bought Mead for Yourself:
-        D. Drink Peacefully
-        F. Start a Fight
-        Z, A, S, Q, X
-        
-        Bought Mead for Your Neighbor:
-        C. Complain about Your Last Quest
-        R. Request Help on Your Next Quest
-        Z, A, S, Q, X
     
     Inventory Menu:
     E [item name]. Equip Item
@@ -402,9 +401,6 @@ X. Exit Game
                 TREASURE:
                     GEM
                     GOLD
-
-    Stats Menu:
-    Z, A, S, Q, X
 
 player = {
     stats: {
