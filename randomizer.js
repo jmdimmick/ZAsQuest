@@ -9,7 +9,7 @@ function evalInput(uInput, context, filename, callback) {
         process.exit();
     }
     if (uInput === '\n') {
-        newDetail(testArray, "done");
+        getDetail(testArray, "done");
         console.log(details);
     }
     callback(null);
@@ -17,33 +17,24 @@ function evalInput(uInput, context, filename, callback) {
 
 repl.start({ prompt: `Enter x to exit ==> `, eval: evalInput });
 
-
-
-function getDetail(detailArr) {
-    let index = random(detailArr.length);
-    return detailArr[index];
-}
-
 function random(length) {
     return Math.floor(Math.random()*length);
 }
 
 const details = {};
 
-function newDetail(detailArr, endOfList, attempts=0) {
-    var newDeet = getDetail(detailArr);
-    attempts++;
-    if (attempts === detailArr.length - 1) {
-        details[endOfList] = true;
-        return endOfList;
-    }
-    else if (!details[newDeet]) {
-        console.log(attempts);
+function getDetail(detailArr, endOfList) {
+    var newDeet = swapNPop(detailArr, endOfList);
+    if (!details[newDeet]) {
         details[newDeet] = true;
-        return newDeet;
-    }
-    else {
-        console.log('recurse');
-        return newDetail(detailArr, endOfList, attempts);
     }
 }
+
+function swapNPop(detailArr, endOfList) {
+    let arrLen = detailArr.length;
+    if (arrLen == 0) return endOfList;
+    let i = random(arrLen-1);
+    [detailArr[arrLen-1], detailArr[i]] = [detailArr[i], detailArr[arrLen-1]];
+    return detailArr.pop()
+}
+
