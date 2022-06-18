@@ -1,0 +1,17 @@
+{
+    "menus": {
+        "topMenu": "",
+        "topMenuAbbr": "",
+        "barMenu": "",
+        "inventory": "",
+        "drink4U": "",
+        "drink4Else": ""
+    },
+    "tavern": {
+        "neighborNames": "",
+        "fightStyles": ""
+    },
+    "quest": {
+        
+    }
+}

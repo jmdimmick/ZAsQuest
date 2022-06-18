@@ -1,4 +1,3 @@
-
 function squareA(a) {
     let b = "5\n"
     a = a.trimEnd()

@@ -1,23 +1,3 @@
-//PLAYER OBJECT
-const player = {
-    stats: {
-        drunkeness: 0,
-        obnoxiousness: 0,
-        neediness: 0,
-        coolness: 0,
-        //shame: 0,
-        //confidence: 0,
-        hasFriend: false,
-        hasQuest: false
-    },
-    currentWeapon: 'no weapon',
-    //uniqueItems: {},
-    //genericItems: {},
-    currentQuest: '',
-    monsters: {},
-    quests: {},
-    neighbors: {}
-};
 
 const topMenu = "\n\
 Top Menu: \n\
@@ -78,10 +58,6 @@ const fightStyles = ['fisticuffs.', 'arm wrestling.', 'a pushup race.', 'random 
 const helpActions = ['yesHelp', 'noHelp'];
 
 //ACTION RESULT CONSTRUCTORS
-
-const stats = "\n  Stats ... to be developed.\n";
-
-const quest = "\n  Quest ... to be developed\n";
 
 const equipMessage = "\n  You equipped that.\n";
 

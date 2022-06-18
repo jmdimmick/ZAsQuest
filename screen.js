@@ -1,5 +1,3 @@
-const addA = require("./exportTest")
-
 module.exports = {
 
     print: function (text) {
