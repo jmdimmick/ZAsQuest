@@ -1,6 +1,8 @@
 const { stat } = require("fs");
 const { get } = require("http");
 const repl = require("repl");
+const { squareA, testPlayer } = require("./exportTest")
+const player = require("./player.json")
 
 const testArray = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 
@@ -12,16 +14,23 @@ function evalInput(uInput, context, filename, callback) {
         getDetail(testArray, "done");
         console.log(details);
     }
+    else {
+        console.log(squareA(uInput));
+        console.log(testPlayer.test);
+        testPlayer.test = !testPlayer.test;
+        console.log(testPlayer.test);
+        console.log(player);
+    }
     callback(null);
 }
 
 repl.start({ prompt: `Enter x to exit ==> `, eval: evalInput });
 
+const details = {};
+
 function random(length) {
     return Math.floor(Math.random()*length);
 }
-
-const details = {};
 
 function getDetail(detailArr, endOfList) {
     var newDeet = swapNPop(detailArr, endOfList);
@@ -38,3 +47,6 @@ function swapNPop(detailArr, endOfList) {
     return detailArr.pop()
 }
 
+
+
+module.exports = { swapNPop }

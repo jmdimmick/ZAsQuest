@@ -1,0 +1,17 @@
+{
+    "player": {
+        "stats": {
+            "drunkeness": 0,
+            "obnoxiousness": 0,
+            "neediness": 0,
+            "coolness": 0,
+            "hasFriend": false,
+            "hasQuest": false
+        },
+        "currentWeapon": "no weapon",
+        "currentQuest": "",
+        "monsters": {},
+        "quests": {},
+        "neighbors": {}
+    }
+}
