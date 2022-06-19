@@ -24,13 +24,7 @@ const player = {
     neighbors: {}
 };
 
-const topMenu = "\n\
-Top Menu: \n\
-Z. Bar \n\
-A. Inventory \n\
-S. Stats \n\
-Q. Start Quest \n\
-X. Exit Game\n"
+const topMenu = "\nTop Menu: \nZ. Bar \nA. Inventory \nS. Stats \nQ. Start Quest \nX. Exit Game\n"
 
 const topMenuAbbr = "\n\
   TOP. Z, A, S, Q, X \n"

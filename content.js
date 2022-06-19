@@ -1,57 +1,57 @@
 
-const topMenu = "\n\
-Top Menu: \n\
-Z. Bar \n\
-A. Inventory \n\
-S. Stats \n\
-Q. Start Quest \n\
-X. Exit Game\n"
+// const topMenu = "\n\
+// Top Menu: \n\
+// Z. Bar \n\
+// A. Inventory \n\
+// S. Stats \n\
+// Q. Start Quest \n\
+// X. Exit Game\n"
 
-const topMenuAbbr = "\n\
-  TOP. Z, A, S, Q, X \n"
+// const topMenuAbbr = "\n\
+//   TOP. Z, A, S, Q, X \n"
 
-const barMenu = "\n\
-    What would like to drink? \n\
-    \n\
-    P.   Buy some mead for yourself \n\
-    O.   Buy some mead for your neighbor \n\
-    TOP. Z, A, S, Q, X \n" 
+// const barMenu = "\n\
+//     What would like to drink? \n\
+//     \n\
+//     P.   Buy some mead for yourself \n\
+//     O.   Buy some mead for your neighbor \n\
+//     TOP. Z, A, S, Q, X \n" 
         
-//ACTION MENUS
+// //ACTION MENUS
 
-const inventory = "\n\
-    \n\
-    E [item name]. Equip Item \n\
-    T [item name]. Trade Item (Lateral) \n\
-    U [item name]. Trade Item + 1 Gem (Upgrade) \n\
-    TOP.           Z, A, S, Q, X\n"
+// const inventory = "\n\
+//     \n\
+//     E [item name]. Equip Item \n\
+//     T [item name]. Trade Item (Lateral) \n\
+//     U [item name]. Trade Item + 1 Gem (Upgrade) \n\
+//     TOP.           Z, A, S, Q, X\n"
 
-const drink4U = "\n\
-    Bought Mead for Yourself: \n\
-    \n\
-    D.   Drink Peacefully \n\
-    F.   Start a Fight \n\
-    TOP. Z, A, S, Q, X\n"
+// const drink4U = "\n\
+//     Bought Mead for Yourself: \n\
+//     \n\
+//     D.   Drink Peacefully \n\
+//     F.   Start a Fight \n\
+//     TOP. Z, A, S, Q, X\n"
 
-const drink4Else = "\n\
-    Bought Mead for Your Neighbor: \n\
-    \n\
-    C.   Complain about Your Last Quest \n\
-    R.   Request Help on Your Next Quest \n\
-    TOP. Z, A, S, Q, X\n"
+// const drink4Else = "\n\
+//     Bought Mead for Your Neighbor: \n\
+//     \n\
+//     C.   Complain about Your Last Quest \n\
+//     R.   Request Help on Your Next Quest \n\
+//     TOP. Z, A, S, Q, X\n"
 
 //REQUEST HELP ACTION
 
-const neighborNames = ['Svie', 'Wart', 'Grog', 'Gunt', 'Lond', 'Guze', 'Horp', 'Durt', 'Pock', 'Chim', 'Dunp', 'Wirl',
-'Pent', 'Quif', 'Yorf', 'Itol', 'Monb', 'Forc', 'Xord', 'Asse', 'Damg', 'Hoji', 'Kult', 'Joix', 
-'Urft', 'Licq', 'Orel', 'Whef', 'Cerd', 'Fonf', 'Jalt', 'Buse', 'Vole', 'Leps', 'Pold', 'Exid', 
-'Tchs', 'Djom', 'Jomb', 'Lury', 'Epol', 'Pian'];
+// const neighborNames = ['Svie', 'Wart', 'Grog', 'Gunt', 'Lond', 'Guze', 'Horp', 'Durt', 'Pock', 'Chim', 'Dunp', 'Wirl',
+// 'Pent', 'Quif', 'Yorf', 'Itol', 'Monb', 'Forc', 'Xord', 'Asse', 'Damg', 'Hoji', 'Kult', 'Joix', 
+// 'Urft', 'Licq', 'Orel', 'Whef', 'Cerd', 'Fonf', 'Jalt', 'Buse', 'Vole', 'Leps', 'Pold', 'Exid', 
+// 'Tchs', 'Djom', 'Jomb', 'Lury', 'Epol', 'Pian'];
 
 let neighborName = getDetail(neighborNames);
 
-const fightStyles = ['fisticuffs.', 'arm wrestling.', 'a pushup race.', 'random feats of strength.', 'a dance off.', 'log rolling.', 
-'a thumb war.', 'a series of inense rock paper scissors matches.', 'holding a burning match.', 'a staring contest.', 
-'darts where your faces were the targets.', 'trading ball taps.', 'trading licks, like licking each other for real.'];
+// const fightStyles = ['fisticuffs.', 'arm wrestling.', 'a pushup race.', 'random feats of strength.', 'a dance off.', 'log rolling.', 
+// 'a thumb war.', 'a series of inense rock paper scissors matches.', 'holding a burning match.', 'a staring contest.', 
+// 'darts where your faces were the targets.', 'trading ball taps.', 'trading licks, like licking each other for real.'];
 
 
 
@@ -65,19 +65,19 @@ const tradeMessage = "\n  You traded that for this.\n";
 
 const upgradeMessage = "\n  You upgraded that to this.\n";
 
-const peaceful = "\n  You are getting drunk.\n";
+// const peaceful = "\n  You are getting drunk.\n";
 
-const fight = `\n  You have started a fight with `;
+// const fight = `\n  You have started a fight with `;
 
-const fightRepeat = `\n  You have started a fight with `;
+// const fightRepeat = `\n  You have started a fight with `;
 
-const fightLost = `\n\
-  You lost. :( \n\
-  `;
+// const fightLost = `\n\
+//   You lost. :( \n\
+//   `;
 
-const fightWon = `\n\
-\n\
-\n You bested `;
+// const fightWon = `\n\
+// \n\
+// \n You bested `;
 
 const fightOutcomes = [fightLost, fightWon]
 
@@ -89,11 +89,11 @@ const requestHelp = getDetail(helpActions);
 
 //FAIL MENUS
 
-const drinkFail = "\n  You need to buy another drink to do that.\n\
-   \n\
-   P.   Buy some mead for yourself \n\
-   O.   Buy some mead for your neighbor \n\
-   TOP. Z, A, S, Q, X \n"
+// const drinkFail = "\n  You need to buy another drink to do that.\n\
+//    \n\
+//    P.   Buy some mead for yourself \n\
+//    O.   Buy some mead for your neighbor \n\
+//    TOP. Z, A, S, Q, X \n"
 
 //QUEST COMPONENTS
 
