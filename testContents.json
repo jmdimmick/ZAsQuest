@@ -1,0 +1,7 @@
+{
+    "menus": {
+        "inventory": "\n  \n  E [item name]. Equip Item \n  T [item name]. Trade Item (Lateral) \n  U [item name]. Trade Item + 1 Gem (Upgrade) \n  TOP. Z, A, S, Q, X\n"
+    },
+    "tavern": {},
+    "quest": {}
+}

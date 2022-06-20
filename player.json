@@ -9,6 +9,8 @@
     },
     "currentWeapon": "no weapon",
     "currentQuest": "",
+    "currentMove": "",
+    "lastMove": "",
     "monsters": {},
     "quests": {},
     "neighbors": {}
